@@ -16,11 +16,16 @@ defmodule BotPlayground.Bot do
     answer(context, "Executing *#{deep_command}* command", parse_mode: "Markdown")
   end
 
+  def handle({:callback_query, %{data: "cancel:" <> command}}, context) do
+    edit(context, :inline, "#{command} command cancelled")
+  end
+
   def handle({:command, "test", _}, context) do
     markup =
       ExGram.Dsl.create_inline([
         [
-          [text: "Yes", url: "t.me/irontest_bot?start=deep_test"]
+          [text: "Yes", url: "t.me/irontest_bot?start=deep_test"],
+          [text: "No", callback_data: "cancel:test"]
         ]
       ])
 
